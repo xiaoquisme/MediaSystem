@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+namespace DAL
+{
+    /// <summary>
+    /// user 数据操作类 guoyc
+    /// </summary>
+    public class duser : IDisposable
+    {
+        /// <summary>
+        /// 根据数据库地址，测试数据库连接可用 成功返回"true" 否则返回错误信息
+        /// </summary>
+        /// <param name="accessPaht"></param>
+        public string setAccessPath(string accessPaht)
+        {
+            AccessHelper acc = new AccessHelper(accessPaht);
+            string str = AccessHelper.startConn();
+            return str;
+        }
+
+        /// <summary>
+        /// 获取 user 表中所有记录
+        /// </summary>
+        /// <returns></returns>
+        public DataTable userDt()
+        {
+            string str = @"select uid as 账号,pwd as 密码,remark as 备注 from [user] ";
+            return AccessHelper.getTable(str, null);
+        }
+
+        /// <summary>
+        /// 根据 登录名 获取一条 user 记录，   错误返回 null
+        /// </summary>
+        /// <param name="userstr"></param>
+        /// <returns></returns>
+        public userModel getUserRecord(string userstr)
+        {
+            string sql = "select uid as 账号,pwd as 密码,remark as 备注 from [user]  where uid=@uid ";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { 
+                new OleDbParameter("@uid", OleDbType.VarChar, 50) };
+            odpArrey[0].Value = userstr;
+            DataTable dt = AccessHelper.getTable(sql, odpArrey);
+            if (dt == null || dt.Rows.Count < 1)
+                return null;  
+            userModel us = new userModel();
+            us.uid = dt.Rows[0][0].ToString();
+            us.pwd = dt.Rows[0][1].ToString();
+            us.remark = dt.Rows[0][2].ToString();
+            return us;
+        }
+
+        /// <summary>
+        /// 向user表中插入一条记录，正确返回 受影响数 错误返回 -1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int insertUser(userModel model)
+        {
+            string sql = "insert into [user] values(@uid,@pwd,@remark)";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { 
+                new OleDbParameter("@uid", OleDbType.VarChar, 50),
+                new OleDbParameter("@pwd", OleDbType.VarChar, 50),
+                new OleDbParameter("@remark", OleDbType.VarChar, 255) };
+            odpArrey[0].Value = model.uid;
+            odpArrey[1].Value = model.pwd;
+            odpArrey[2].Value = model.remark;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 删除 user 表中一条记录， 正确返回 受影响数 错误返回 -1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int delUser(userModel model)
+        {
+            string sql = "delete from [user] where uid=@uid";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { 
+                new OleDbParameter("@uid", OleDbType.VarChar, 50)};
+            odpArrey[0].Value = model.uid;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 向 user 表中根据 uid 更新一条记录， 正确返回 受影响数 错误返回 -1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int updateUser(userModel model)
+        {
+            string sql = "update [user] set uid=@uid,pwd=@pwd,remark=@remark where uid=@uid";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@uid", OleDbType.VarChar, 50), 
+                new OleDbParameter("@pwd", OleDbType.VarChar, 50, model.pwd),
+                new OleDbParameter("@remark", OleDbType.VarChar, 255, model.remark),
+                new OleDbParameter("@uid", OleDbType.VarChar, 255, model.uid) };
+            odpArrey[0].Value = model.uid;
+            odpArrey[1].Value = model.pwd;
+            odpArrey[2].Value = model.remark;
+            odpArrey[3].Value = model.uid;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+        //private OleDbParameter[] userToParameters(userModel user)
+        //{
+        //     //OleDbParameter[] odpArrey =
+        //    return new OleDbParameter[] { new OleDbParameter("@uid", OleDbType.VarChar, 50, user.uid), new OleDbParameter("@pwd", OleDbType.VarChar, 50, user.pwd), new OleDbParameter("@remark", OleDbType.VarChar, 255, user.remark) };
+        //}
+
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

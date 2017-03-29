@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+namespace DAL
+{
+    public class dclass
+    {
+        /// <summary>
+        /// 获取 class 表中所有信息 错误返回 null
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllRecord()
+        {
+            string str = @"select id as 编号，buiding as 楼号,classid as 教室号,remark as 备注 from [class]";
+            return AccessHelper.getTable(str, null);
+        }
+
+        /// <summary>
+        /// 获取class 表中 楼号、教室号、备注，错误返回 null
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllRecord1()
+        {
+            string str = @"select buiding as 楼号,classid as 教室号,remark as 备注 from [class]";
+            return AccessHelper.getTable(str, null);
+        }
+
+
+        /// <summary>
+        /// 向 class 表中插入一条记录 ，返回受影响记录数 错误返回-1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int insertClass(classModel model)
+        {
+            string sql = "insert into [class] values('@id','@buiding','@classid','@remark')";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { 
+                //new OleDbParameter("@id", OleDbType.Integer),
+                new OleDbParameter("@buiding", OleDbType.VarChar, 50),
+                new OleDbParameter("@classid", OleDbType.VarChar, 255 ),
+                new OleDbParameter("@remark", OleDbType.VarChar, 255) };
+            //odpArrey[0].Value = model.id;
+            odpArrey[1].Value = model.buiding;
+            odpArrey[2].Value = model.classid;
+            odpArrey[3].Value = model.remark;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 根据 classid 删除 class 表中一条记录，返回受影响记录数 错误返回-1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int delUser(classModel model)
+        {
+            string sql = "delete from [class] where id=@id";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@classid", OleDbType.VarChar,255) };
+            odpArrey[0].Value = model.classid;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+    }
+}

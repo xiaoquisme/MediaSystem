@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using BLL;
+using DAL;
+namespace mediasys
+{
+    public partial class class_detial :DockContent
+    {
+        public class_detial( string  classname)
+        {
+            InitializeComponent();
+            this.Text = "班级详细物品表";
+            dataGridView1.ReadOnly = true;
+            dataGridView2.AllowUserToAddRows = false;
+            dataGridView2.ReadOnly = true;
+            dataGridView1.AllowUserToAddRows = false;
+            DataTable dt = new BLL_classcontent().getRecordByClass(classname);
+            dt.Columns.Remove("教室号");
+            this.dataGridView1.DataSource = dt;
+            this.dataGridView2.DataSource = new BLL_repair().getRecordByClass(classname);
+        }
+    }
+}

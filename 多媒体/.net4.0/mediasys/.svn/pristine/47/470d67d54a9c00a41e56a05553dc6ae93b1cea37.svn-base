@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+namespace DAL
+{
+    class dclassContent
+    {
+
+        /// <summary>
+        /// 获取所有 classConment 表信息
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllRecord()
+        {
+            string str = @"select id as 编号，classid as 教室号,contentName as 品名,Type as 类型,unit as 单价,number as 数量, price as 单价, total as 总价, remark as 备注 from class";
+            return AccessHelper.getTable(str, null);
+        }
+
+        /// <summary>
+        /// 根据 classid 教室号 向 classConment 表中插入一条记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int insertClass(classModel model)
+        {
+            string sql = "insert into [class] values('@id','@classid','@','@remark')";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@id", OleDbType.Integer, model.id),
+                new OleDbParameter("@buiding", OleDbType.VarChar, 50, model.buiding),
+                new OleDbParameter("@classid", OleDbType.VarChar, 255, model.classid),
+                new OleDbParameter("@remark", OleDbType.VarChar, 255, model.remark) };
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+    }
+}

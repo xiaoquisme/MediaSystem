@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+namespace DAL
+{
+    /// <summary>
+    /// user 数据操作类 guoyc
+    /// </summary>
+    public class duser:IDisposable
+    {
+        
+        /// <summary>
+        /// 根据 登录名 获取一条 user 记录
+        /// </summary>
+        /// <param name="userstr"></param>
+        /// <returns></returns>
+        public user getUserRecord(string userstr)
+        {
+            AccessHelper access = new AccessHelper();
+            string sql = "select * from user where uid=@uid";
+            OleDbParameter[] odpArrey=new OleDbParameter[]{ new OleDbParameter("@uid",OleDbType.VarChar,50,userstr)};
+            DataTable dt=access.getTable(sql, odpArrey);
+            user us = new user();
+            us.uid = dt.Rows[0][0].ToString();
+            us.pwd = dt.Rows[0][1].ToString();
+            us.remark = dt.Rows[0][2].ToString();
+            access.Dispose();
+            return us;
+        }
+
+        /// <summary>
+        /// 测试数据库连接可用 成功返回"true" 否则返回错误信息
+        /// </summary>
+        /// <param name="accessPaht"></param>
+        public string setAccessPath(string accessPaht)
+        {
+            AccessHelper access = new AccessHelper(accessPaht);
+            string str=access.startConn();
+            access.Dispose();
+            return str;
+        }
+
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+}

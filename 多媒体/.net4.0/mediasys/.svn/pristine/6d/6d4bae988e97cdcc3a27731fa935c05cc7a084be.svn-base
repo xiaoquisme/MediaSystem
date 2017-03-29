@@ -1,0 +1,126 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+
+namespace Common
+{
+    /// <summary>
+    /// Access 连接 guoyc
+    /// </summary>
+    public class AccessHelper:IDisposable
+    {
+        static string constr = @"Provider=Microsoft.JET.OLEDB.4.0;Data Source=..\..\..\..\mediaSys.mdb;Persist Security Info=False";
+        static OleDbConnection oldbCon;
+
+        public AccessHelper()
+        {
+        }
+        public AccessHelper(string accessPath)
+        {
+            constr = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + accessPath + ";Persist Security Info=True";
+        }
+
+
+        /// <summary>
+        /// 开始连接Access数据库 成功返回"true" 否则返回错误信息
+        /// </summary>
+        /// <param name="accessPath"></param>
+        /// <returns></returns>
+        public static string startConn(string accessPath = null)
+        {
+            try
+            {
+                if (oldbCon == null || oldbCon.State == ConnectionState.Closed)
+                {
+                    if (!String.IsNullOrEmpty(accessPath))
+                        constr = accessPath;
+
+                    oldbCon = new OleDbConnection(constr);
+                    oldbCon.Open();
+                    return "true";
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return ex.Message;
+            }
+        }
+
+        public void stopConn()
+        {
+            if (oldbCon.State != ConnectionState.Closed)
+                oldbCon.Dispose();
+        }
+
+        /// <summary>
+        /// 根据sql查询 获取一张表
+        /// </summary>
+        /// <param name="sqlstr"></param>
+        /// <param name="para"></param>
+        /// <returns></returns>
+        public static DataTable getTable(string sqlstr, OleDbParameter[] para=null)
+        {
+            try
+            {
+                startConn();
+                DataTable dt = new DataTable();
+                OleDbDataAdapter oda = new OleDbDataAdapter();
+                OleDbCommand odc = new OleDbCommand(sqlstr, oldbCon);
+                if (para != null)
+                {
+                    foreach (OleDbParameter item in para)
+                    {
+                        odc.Parameters.Add(item);
+                    }
+                }
+                oda.SelectCommand = odc;
+                oda.Fill(dt);
+                oda.Dispose();
+                return dt;
+            }
+            catch (Exception)
+            {
+                return null;
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 执行 sql 语句
+        /// </summary>
+        /// <param name="sqlstr"></param>
+        /// <param name="para"></param>
+        /// <returns></returns>
+        public static int executeSql(string sqlstr, OleDbParameter[] para=null)
+        {
+            int i = -1;
+            try
+            {
+                startConn();
+                OleDbCommand odc = new OleDbCommand(sqlstr, oldbCon);
+                foreach (OleDbParameter item in para)
+                {
+                    odc.Parameters.Add(item);
+                }
+
+                i = odc.ExecuteNonQuery();
+                odc.Dispose();
+                odc.Dispose();
+                return i;
+            }
+            catch (Exception)
+            {
+                return i;
+            }
+        }
+
+        public void Dispose()
+        {
+            oldbCon.Dispose();
+        }
+    }
+}

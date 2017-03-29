@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+namespace DAL
+{
+    public class dclassContent
+    {
+
+        /// <summary>
+        /// 获取所有 classConment 表信息
+        /// </summary>
+        /// <returns></returns> ok
+        public DataTable getAllRecord()
+        {
+            string str = @"select id as 物品编号,classid as 教室号,contentName as 品名,Type as 类型,unit as 单位,number as 数量, price as 单价, total as 总价,remark as 备注 from [classContent]";
+            return AccessHelper.getTable(str, null);
+        }
+
+        /// <summary>
+        /// 根据教室号 查询所有教室内物品信息， 错误返回null
+        /// </summary>
+        /// <param name="className"></param>
+        /// <returns></returns>
+        public DataTable getAllRecordByClass(string className)
+        {
+            string sql = "select id as 物品编号,classid as 教室号,contentName as 品名,Type as 类型,unit as 单位,[number] as 数量, price as 单价, total as 总价,remark as 备注 from [classContent] where classid=@classid ";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@classid", OleDbType.VarChar, 255)};
+            odpArrey[0].Value = className;
+            return AccessHelper.getTable(sql,odpArrey);
+        }
+
+
+        /// <summary>
+        /// 根据 教室号、物品名称、类型 查询 物品信息， 错误返回null
+        /// </summary>
+        /// <param name="className"></param>
+        /// <returns></returns>
+        public DataTable getOneRecordByClass(classContentModel model)
+        {
+            string sql = "select id as 物品编号,classid as 教室号,contentName as 品名,Type as 类型,unit as 单位,[number] as 数量, [price] as 单价, total as 总价,remark as 备注 from [classContent] where classid=@classid and contentName=@contentName and Type=@Type ";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@classid", OleDbType.VarChar, 255),
+                new OleDbParameter("@contentName", OleDbType.VarChar, 255),
+                new OleDbParameter("@Type", OleDbType.VarChar, 255)};
+            odpArrey[0].Value = model.classid;
+            odpArrey[1].Value = model.contentName;
+            odpArrey[2].Value = model.type;
+            return AccessHelper.getTable(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 向 classConment 表中插入一条记录，返回受影响记录数 错误返回-1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int insertClassConment(classContentModel model)
+        {
+            string sql = "insert into [classContent] ([classid],[contentName],[Type],[unit],[number],[price],[total],[remark]) values(@classid,@contentName,@type,@unit,@number,@price,@total,@remark)";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@classid", OleDbType.VarChar, 255),
+                new OleDbParameter("@contentName", OleDbType.VarChar, 255),
+                new OleDbParameter("@Type", OleDbType.VarChar, 255),
+                new OleDbParameter("@unit", OleDbType.VarChar, 255),
+                new OleDbParameter("@number", OleDbType.Integer),
+                new OleDbParameter("@price", OleDbType.Integer),
+                new OleDbParameter("@total", OleDbType.Integer),
+                new OleDbParameter("@remark", OleDbType.VarChar,1000)};
+            odpArrey[0].Value = model.classid;
+            odpArrey[1].Value = model.contentName;
+            odpArrey[2].Value = model.type;
+            odpArrey[3].Value = model.unit;
+            odpArrey[4].Value = model.number;
+            odpArrey[5].Value = model.prince;
+            odpArrey[6].Value = model.total;
+            odpArrey[7].Value = model.remark;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 根据 classid、contentName 向 classConment 表中删除一条记录， 返回受影响记录数 错误返回-1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int delOneRecord(classContentModel model)
+        {
+            string sql = "delete from [classContent] where [classid]=@classid and [contentName]=@contentName";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@classid", OleDbType.VarChar, 255),
+                new OleDbParameter("@contentName", OleDbType.VarChar, 255)};
+            odpArrey[0].Value = model.classid;
+            odpArrey[0].Value = model.contentName;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+    }
+}

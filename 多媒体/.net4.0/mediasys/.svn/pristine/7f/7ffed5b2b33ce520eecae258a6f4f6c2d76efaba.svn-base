@@ -1,0 +1,58 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using DAL;
+using Common;
+namespace BLL
+{
+   public  class BLL_class : IDisposable
+    {
+       public int maxColumn { get; set; }
+        dclass classs = new dclass();
+        /// <summary>
+        /// 返回教室的楼号和教室号和备注
+        /// </summary>
+        /// <returns></returns>
+        public DataTable findClass()
+        {
+            int flag = 0;
+            maxColumn = 0;
+            DataTable DT = new DataTable();
+            DataTable dttempl = new DataTable();
+
+
+            DT=classs.getAllRecord1();
+                for (int i = 0; i <= 20; i++)
+                    dttempl.Columns.Add(i.ToString(), typeof(string));
+            DataRow dr =dttempl.NewRow();
+
+            dr[flag++] = DT.Rows[0]["楼号"].ToString();
+            dr[flag++] = DT.Rows[0]["教室号"].ToString();
+            for (int i = 1; i < DT.Rows.Count;i++ )
+            {
+                string str=DT.Rows[i]["楼号"].ToString();
+                if (string.Equals(str, DT.Rows[i - 1]["楼号"].ToString()))
+                {
+                    dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                }
+                else
+                {
+                    maxColumn = maxColumn > flag ? maxColumn : flag;
+                    dttempl.Rows.Add(dr);
+                    flag = 0;
+                    dr = dttempl.NewRow();
+                    dr[flag++] = DT.Rows[i]["楼号"].ToString();
+                    dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                }
+            }
+            maxColumn = maxColumn > flag ? maxColumn : flag;
+            dttempl.Rows.Add(dr);
+            return dttempl;
+        }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

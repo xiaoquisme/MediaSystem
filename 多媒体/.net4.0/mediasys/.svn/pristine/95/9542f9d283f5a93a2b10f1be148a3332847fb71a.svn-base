@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using DAL;
+using System.Data;
+using Common;
+namespace BLL
+{
+    public class BLL_Class : IDisposable
+    {
+
+        public int maxColumn { get; set; }
+        dclass classs = new dclass();
+        /// <summary>
+        /// 返回教室的楼号和教室号和备注
+        /// </summary>
+        /// <returns></returns>
+        public DataTable findClass()
+        {
+            int flag = 0;
+            maxColumn = 0;
+            DataTable DT = new DataTable();
+            DataTable dttempl = new DataTable();
+            DT = classs.getAllRecord1();
+            for (int i = 0; i <= 20; i++)
+                dttempl.Columns.Add(i.ToString(), typeof(string));
+            DataRow dr = dttempl.NewRow();
+
+            dr[flag++] = DT.Rows[0]["楼号"].ToString();
+            dr[flag++] = DT.Rows[0]["教室号"].ToString();
+            for (int i = 1; i < DT.Rows.Count; i++)
+            {
+                string str = DT.Rows[i]["楼号"].ToString();
+                if (string.Equals(str, DT.Rows[i - 1]["楼号"].ToString()))
+                {
+                    dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                }
+                else
+                {
+                    maxColumn = maxColumn > flag ? maxColumn : flag;
+                    dttempl.Rows.Add(dr);
+                    flag = 0;
+                    dr = dttempl.NewRow();
+                    dr[flag++] = DT.Rows[i]["楼号"].ToString();
+                    dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                }
+            }
+            maxColumn = maxColumn > flag ? maxColumn : flag;
+            dttempl.Rows.Add(dr);
+            return dttempl;
+        }
+        /// <summary>
+        /// 向 class 表中插入一条记录
+        /// </summary>
+        /// <param name="bulnum"></param>
+        /// <param name="classnum"></param>
+        /// <returns>true  or  false</returns>
+        public bool insertClass(string bulnum,string classnum="")
+        {
+            classModel model = new classModel();
+            model.buiding = bulnum;
+            model.classid = classnum;
+            model.remark = "";
+            if (classs.insertClass(model) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        ///  根据 楼号和 教室号 删除表中一条记录
+        /// </summary>
+        /// <param name="bulnum"></param>
+        /// <param name="classnum"></param>
+        /// <returns></returns>
+        public bool delclass(string bulnum,string classnum)
+        {
+            classModel model = new classModel();
+            model.buiding = bulnum;
+            model.classid = classnum;
+            if (classs.delUser(model) > 0)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

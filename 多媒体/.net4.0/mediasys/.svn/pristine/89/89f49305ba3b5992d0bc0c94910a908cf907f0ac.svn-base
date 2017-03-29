@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using DAL;
+using Common;
+namespace mediasys
+{
+    public partial class Fm_mainClass : DockContent
+    {
+        private BLL.BLL_Class cls;
+        private DataTable dt;
+        private WeifenLuo.WinFormsUI.Docking.DockPanel dockpanel1;
+        public Fm_mainClass(DockPanel dockpanel1)
+        {
+            this.dockpanel1 = dockpanel1;
+            InitializeComponent();
+            cls = new BLL.BLL_Class();
+            dt = cls.findClass();
+            this.Width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+            this.Height = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+        }
+        private void Fm_mainClass_Load(object sender, EventArgs e)
+        {
+            Initdgv();
+        }
+
+        private void Initdgv()
+        {
+            this.dgv1.ReadOnly = true;
+            this.dgv1.ColumnCount = cls.maxColumn - 1;
+            this.dgv1.Rows.Add(dt.Rows.Count);
+            this.dgv1.RowHeadersWidth = 60;
+            this.dgv1.TopLeftHeaderCell.Value = "教室楼号";
+
+            for (int i = 0; i < cls.maxColumn - 1; i++)
+            {
+                this.dgv1.Columns[i].HeaderText = "    " + (i + 1).ToString();
+            }
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                this.dgv1.Rows[i].HeaderCell.Value = dt.Rows[i][0].ToString();
+                for (int j = 0; j < this.dgv1.Columns.Count; j++)
+                {
+                    this.dgv1.Rows[i].Cells[j].Value = dt.Rows[i][j + 1];
+                }
+            }
+
+        }
+
+        private void dgv1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {   
+            try
+            {
+                new class_detial(dgv1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()).Show();
+            }
+            catch (Exception)
+            {
+
+
+            }
+
+        }
+
+
+    }
+}

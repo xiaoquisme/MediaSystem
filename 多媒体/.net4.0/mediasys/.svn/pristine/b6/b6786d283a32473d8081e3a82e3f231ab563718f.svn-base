@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using DAL;
+using Common;
+namespace BLL
+{
+    public class BLL_user:IDisposable
+    { 
+        duser users = new duser();
+        /// <summary>
+        /// 判断Access数据库是否连接成功
+        /// </summary>
+        /// <param name="path">数据库地址</param>
+        /// <returns></returns>
+        public bool Accesssceshi(string path)
+        {
+            string str=users.setAccessPath(path);
+            if ( string.Equals(str,"true"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 根据用户名和密码判断用户是否存在
+        /// </summary>
+        /// <param name="name">用户名</param>
+        /// <param name="pwd">密码</param>
+        /// <returns></returns>
+        public bool chaxunUsers(string name,string pwd)
+        {
+            userModel usemodel = new userModel();
+            usemodel = users.getUserRecord(name);
+            if (string.Equals(usemodel.pwd ,pwd))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using DAL;
+using System.Data;
+namespace BLL
+{
+    public class BLL_repair : IDisposable
+    {
+        drepire repair = new drepire();
+        /// <summary>
+        /// 根据 classid 查询所有维修记录
+        /// </summary>
+        /// <param name="classid"></param>
+        /// <returns></returns>
+        public DataTable getRecordByClass(string classid)
+        {
+            return repair.getAllRecordByClass(classid);
+        }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

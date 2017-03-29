@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+namespace mediasys
+{
+    public partial class Add : DockContent ,Iwrong
+    {
+        private BLL.BLL_Class cls = new BLL.BLL_Class();
+        private BLL.BLL_classcontent cteent = new BLL.BLL_classcontent();
+        DataTable dt;
+        public Add()
+        {
+            InitializeComponent();
+            IntItcb();
+        }
+
+        private void IntItcb()
+        {
+            dt = cls.findClass();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                this.cb_class_bulidign.Items.Add(dt.Rows[i][0].ToString());
+                this.cb_Repire_building.Items.Add(dt.Rows[i][0].ToString());
+            }
+            this.cb_class_bulidign.SelectedItem = 0;
+            this.cb_Repire_building.SelectedItem = 0;
+            this.cb_repire_class.SelectedItem = 0;
+           
+        }
+
+        private void cb_Repire_building_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cb_Repire_building_Leave(object sender, EventArgs e)
+        {
+            cb_repire_class.Items.Clear();
+            string str = cb_Repire_building.SelectedItem.ToString();
+            int i;
+            for (i = 0; i < dt.Rows.Count; i++)
+            {
+                if (dt.Rows[i][0].ToString() == str)
+                {
+                    break;
+                }
+            }
+            for (int j = 0; j < cls.maxColumn; j++)
+            {
+                if (string.IsNullOrEmpty(dt.Rows[i][j].ToString())) continue;
+                cb_repire_class.Items.Add(dt.Rows[i][j]);
+            }
+        }
+
+        private void btn_addClass_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tb_class.Text))
+            {
+                handleWrong();
+                return;
+            }
+            if (cls.insertClass(cb_class_bulidign.SelectedItem.ToString(), tb_class.Text))
+            {
+                MessageBox.Show("数据已经提交", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            else
+            {
+                MessageBox.Show("班级已经存在", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void btn_del_calss_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tb_class.Text))
+            {
+                handleWrong();
+                return;
+            }
+            if (cls.delclass(cb_class_bulidign.SelectedItem.ToString(), tb_class.Text))
+            {
+                MessageBox.Show("数据已提交", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+        public void handleWrong()
+        {
+            MessageBox.Show("请检查数据的完整性","提示",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+        }
+         /// <summary>
+        /// 添加楼号
+         /// </summary>
+         /// <param name="sender"></param>
+         /// <param name="e"></param>
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (cls.insertClass(tb_building.Text))
+            {
+                MessageBox.Show("数据已提交", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            else
+            {
+                handleWrong();
+                return;
+            }
+        }
+           /// <summary>
+           /// 删除楼号
+           /// </summary>
+           /// <param name="sender"></param>
+           /// <param name="e"></param>
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (cls.delclass(tb_building.Text, ""))
+            {
+                MessageBox.Show("数据已提交", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            else
+            {
+                handleWrong();
+                return;
+            }
+
+        }
+
+        private void btn_unit_add_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tb_repire.Text) || string.IsNullOrEmpty(tb_type.Text) || string.IsNullOrEmpty(tb_unit.Text))
+            {
+                handleWrong();
+                return;
+            }
+            if (cteent.insertContent(cb_Repire_building.SelectedItem.ToString(), cb_repire_class.SelectedItem.ToString(),
+                tb_repire.Text, tb_type.Text, tb_unit.Text, tb_count.Text, tb_price.Text))
+            {
+                MessageBox.Show("数据已提交", "提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            else
+            {
+                handleWrong();
+                return;
+            }
+
+        }
+
+        private void btn_unit_del_Click(object sender, EventArgs e)
+        {
+          
+        }
+    }
+}

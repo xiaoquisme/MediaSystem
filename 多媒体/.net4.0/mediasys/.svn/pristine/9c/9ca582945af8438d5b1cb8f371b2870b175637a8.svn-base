@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using DAL;
+using Common;
+namespace BLL
+{
+   public  class BLL_class : IDisposable
+    {
+        dclass classs = new dclass();
+        /// <summary>
+        /// 返回教室的楼号和教室号和备注
+        /// </summary>
+        /// <returns></returns>
+        public DataTable findClass()
+        {
+            int flag = 0;
+            DataTable DT = new DataTable();
+            DataTable dttempl = new DataTable();
+            for (int i = 1; i <= 10;i++ )
+                dttempl.Columns.Add(i.ToString(),typeof(string));
+
+            DT=classs.getAllRecord1();
+            DataRow dr =dttempl.NewRow();
+
+            dr[flag++] = DT.Rows[0]["楼号"].ToString();
+            dr[flag++] = DT.Rows[0]["教室号"].ToString();
+            for (int i = 1; i < DT.Rows.Count;i++ )
+            {
+                string str=DT.Rows[i]["楼号"].ToString();
+                if (string.Equals(str, DT.Rows[i - 1]["楼号"].ToString()))
+                {
+                    dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                    if (flag == 10)
+                    {
+                        dttempl.Rows.Add(dr);
+                        flag = 1;
+                        dr = dttempl.NewRow();
+                        dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                    }
+                }
+                else
+                {
+                    dttempl.Rows.Add(dr);
+                    flag = 0;
+                    dr = dttempl.NewRow();
+                    dr[flag++] = DT.Rows[i]["楼号"].ToString();
+                    dr[flag++] = DT.Rows[i]["教室号"].ToString();
+                }
+            }
+            dttempl.Rows.Add(dr);
+            return dttempl;
+        }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

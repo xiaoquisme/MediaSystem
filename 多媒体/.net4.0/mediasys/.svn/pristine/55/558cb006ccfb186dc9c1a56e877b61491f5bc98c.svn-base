@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+namespace mediasys
+{
+    public partial class Fmmain : DockContent
+    {
+        Add addc;
+        Fm_mainClass main;
+        public Fmmain()
+        {
+            InitializeComponent();
+            this.Width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
+            this.Height = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
+             main = new Fm_mainClass(this.dockPanel1);
+            
+
+        }
+
+     
+        private void Fmmain_Load(object sender, EventArgs e)
+        {
+            main.Show(dockPanel1);
+        }
+        Add add = new Add();
+        private void 添加教室ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            add.Activate();
+            
+            add.Show(dockPanel1);
+        }
+    }
+}

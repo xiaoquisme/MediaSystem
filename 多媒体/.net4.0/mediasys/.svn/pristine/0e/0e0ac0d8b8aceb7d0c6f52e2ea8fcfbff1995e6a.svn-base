@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using DAL;
+using System.Data;
+namespace BLL
+{
+    
+    public class BLL_classcontent : IDisposable
+    {
+        dclassContent content = new dclassContent();
+        /// <summary>
+        /// 根据教室号 查询所有教室内物品信息
+        /// </summary>
+        /// <param name="className"></param>
+        /// <returns></returns>
+        public DataTable getRecordByClass(string className)
+        {
+            return content.getAllRecordByClass(className);
+        }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

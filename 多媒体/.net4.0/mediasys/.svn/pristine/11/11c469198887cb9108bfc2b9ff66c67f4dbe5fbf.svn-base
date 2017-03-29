@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using DAL;
+using Common;
+using System.Data;
+namespace BLL
+{
+    
+    public class BLL_classcontent : IDisposable
+    {
+        dclassContent content = new dclassContent();
+        /// <summary>
+        /// 根据教室号 查询所有教室内物品信息
+        /// </summary>
+        /// <param name="className"></param>
+        /// <returns></returns>
+        public DataTable getRecordByClass(string className)
+        {
+            return content.getAllRecordByClass(className);
+        }
+        /// <summary>
+        /// 向 classConment 表中插入一条记录
+        /// </summary>
+        /// <returns></returns>
+        public bool insertContent(string bulnum,string classnum,string shebei,string guige,string danwei,string shuliang,string danjia)
+        {
+            classContentModel model = new classContentModel();
+            model.classid = classnum;
+            model.contentName = shebei;
+            model.prince=float.Parse(danjia);
+            model.number = int.Parse(shuliang);
+            model.type = guige;
+            model.unit=danwei;
+            model.total = model.prince * model.number;
+            model.remark = "";
+            if (content.insertClassConment(model) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        ///  根据 楼号，教师号，和类型 向 classConment 表中删除一条记录
+        /// </summary>
+        /// <param name="classnum"></param>
+        /// <param name="contentname"></param>
+        /// <param name="contenttype"></param>
+        /// <returns></returns>
+        public bool deldelOneRecord(string classnum,string contentname,string contenttype)
+        {
+            classContentModel model = new classContentModel();
+            model.type = contenttype;
+            model.classid = classnum;
+            model.contentName = contentname;
+            if (content.delOneRecord(model) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

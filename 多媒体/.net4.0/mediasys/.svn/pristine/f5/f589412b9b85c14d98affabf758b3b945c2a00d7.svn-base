@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+
+namespace DAL
+{
+    class drepire
+    {
+        /// <summary>
+        /// 获取 drepire 表中所有记录
+        /// </summary>
+        /// <returns></returns>
+        public DataTable userDt()
+        {
+            string str = @"select id as 编号,classid as 教室号,RepireTime as 维修时间,RepireRemark as 备注 from user";
+            return AccessHelper.getTable(str, null);
+        }
+    }
+}

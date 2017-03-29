@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Common
+{
+    /// <summary>
+    /// 教室表 guoyc
+    /// </summary>
+    public class classModel
+    {
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public int id{get;set;}
+        /// <summary>
+        /// 楼号
+        /// </summary>
+        public string buiding{get;set;}
+        /// <summary>
+        /// 教室号
+        /// </summary>
+        public string classid { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
+    }
+    /// <summary>
+    /// 教室物品详细表 guoyc
+    /// </summary>
+    public class classContentModel
+    {
+        /// <summary>
+        /// 自动编号
+        /// </summary>
+        public int id { get; set; }
+        /// <summary>
+        /// 教室号
+        /// </summary>
+        public string classid { get; set; }
+        /// <summary>
+        /// 品名
+        /// </summary>
+        public string contentName { get; set; }
+        /// <summary>
+        /// 规格型号
+        /// </summary>
+        public string Tyoe { get; set; }
+        /// <summary>
+        /// 单位
+        /// </summary>
+        public string unit { get; set; }
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public int number { get; set; }
+        /// <summary>
+        /// 单价
+        /// </summary>
+        public float prince { get; set; }
+        /// <summary>
+        /// 总价
+        /// </summary>
+        public float total { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
+    }
+    /// <summary>
+    /// 维修表 guoyc
+    /// </summary>
+    public class repireModel
+    {
+        /// <summary>
+        /// 自动编号
+        /// </summary>
+        public int id { get; set; }
+        /// <summary>
+        /// 教室号
+        /// </summary>
+        public string classid { get; set; }
+        /// <summary>
+        /// 维修物品名
+        /// </summary>
+        public string contentName { get; set; }
+        /// <summary>
+        /// 维修时间
+        /// </summary>
+        public string RepireTime { get; set; }
+        /// <summary>
+        /// 维修内容
+        /// </summary>
+        public string ReprieContent { get; set; }
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public string ReprieRemaik { get; set; }
+    }
+    /// <summary>
+    /// 用户表 guoyc
+    /// </summary>
+    public class userModel
+    {
+        /// <summary>
+        /// 账号
+        /// </summary>
+        public string uid { get; set; }
+        /// <summary>
+        /// 密码
+        /// </summary>
+        public string pwd { get; set; }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
+    }
+
+}

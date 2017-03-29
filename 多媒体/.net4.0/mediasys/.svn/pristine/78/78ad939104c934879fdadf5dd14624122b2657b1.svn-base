@@ -1,0 +1,99 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+
+namespace DAL
+{
+    public class drepire
+    {
+        /// <summary>
+        /// 获取 drepire 表中所有记录 id as 编号,classid as 教室号,contentName as 物品名称,RepireTime as 维修时间,RepireRemark as 备注
+        /// </summary>
+        /// <returns></returns>
+        public DataTable userDt()
+        {
+            string str = @"select id as 编号,classid as 教室号,contentName as 物品名称,RepireContent as 维修内容,RepireTime as 维修时间,RepireRemark as 备注 from [repire]";
+            return AccessHelper.getTable(str, null);
+        }
+
+        /// <summary>
+        /// 根据 classid 查询所有维修记录， 错误返回null
+        /// </summary>
+        /// <param name="classid"></param>
+        /// <returns></returns>
+        public DataTable getAllRecordByClass(string classid)
+        {
+            string sql = @"select id as 编号,classid as 教室号,contentName as 物品名称,RepireContent as 维修内容,RepireTime as 维修时间,RepireRemark as 备注 from [repire] where classid=@classid";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { 
+                new OleDbParameter("@classid", OleDbType.VarChar,255)};
+            odpArrey[0].Value = classid;
+            return AccessHelper.getTable(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 向 drepire 表中插入一条记录，返回受影响记录数 错误返回-1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int insertOneRecord(repireModel model)
+        {
+            string sql = "insert into [repire](classid,contentName,RepireContent,RepireTime,RepireRemark) values(@classid,@contentName,@RepireContent,@RepireTime,@RepireRemark)";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { 
+                new OleDbParameter("@classid", OleDbType.VarChar,255),
+                new OleDbParameter("@contentName", OleDbType.VarChar, 255),
+                new OleDbParameter("@RepireContent", OleDbType.VarChar, 255 ),
+                new OleDbParameter("@RepireTime", OleDbType.VarChar, 255 ),
+                new OleDbParameter("@RepireRemark", OleDbType.VarChar, 1000) };
+            odpArrey[0].Value = model.classid;
+            odpArrey[1].Value = model.contentName;
+            odpArrey[2].Value = model.RepireContent;
+            odpArrey[3].Value = model.RepireTime;
+            odpArrey[4].Value = model.RepireRemark;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+       
+        /// <summary>
+        /// 向 repire 表中根据 id 更新一条记录， 正确返回 受影响数 错误返回 -1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int updateOneRecord(repireModel model)
+        {
+            string sql = "update [user] set classid=@classid,contentName=@contentName,RepireContent=@RepireContent,RepireTime=@RepireTime,RepireRemark=@RepireRemark where id=@id";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@classid", OleDbType.VarChar, 255), 
+                new OleDbParameter("@contentName", OleDbType.VarChar, 255),
+                new OleDbParameter("@RepireContent", OleDbType.VarChar, 255 ),
+                new OleDbParameter("@RepireTime", OleDbType.VarChar, 255),
+                new OleDbParameter("@RepireRemark", OleDbType.VarChar, 10000),
+                new OleDbParameter("@classid", OleDbType.Integer)};
+            odpArrey[0].Value = model.classid;
+            odpArrey[1].Value = model.contentName;
+            odpArrey[2].Value = model.RepireContent;
+            odpArrey[3].Value = model.RepireTime;
+            odpArrey[4].Value = model.RepireRemark;
+            odpArrey[5].Value = model.id;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+        /// <summary>
+        /// 根据 contentName 向 drepire 表中删除一条记录， 返回受影响记录数 错误返回-1
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int delOneRecord(repireModel model)
+        {
+            string sql = "delete from [repire] where contentName=@contentName";
+            OleDbParameter[] odpArrey = new OleDbParameter[] {
+                new OleDbParameter("@contentName", OleDbType.VarChar, 255)};
+            odpArrey[0].Value = model.contentName;
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+
+
+    }
+}

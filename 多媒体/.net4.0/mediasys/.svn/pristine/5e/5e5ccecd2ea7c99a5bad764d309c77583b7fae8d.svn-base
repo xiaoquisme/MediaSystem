@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mediasys", "mediasys\mediasys.csproj", "{3BFFEEAC-1A87-45A8-8EFD-569265E1500C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{E47CF5CF-6982-4638-A857-67E37F505E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{46C33A65-8F4C-4018-B71E-F4A2EEE4785A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BFFEEAC-1A87-45A8-8EFD-569265E1500C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFFEEAC-1A87-45A8-8EFD-569265E1500C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFFEEAC-1A87-45A8-8EFD-569265E1500C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BFFEEAC-1A87-45A8-8EFD-569265E1500C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E47CF5CF-6982-4638-A857-67E37F505E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E47CF5CF-6982-4638-A857-67E37F505E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E47CF5CF-6982-4638-A857-67E37F505E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E47CF5CF-6982-4638-A857-67E37F505E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46C33A65-8F4C-4018-B71E-F4A2EEE4785A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C33A65-8F4C-4018-B71E-F4A2EEE4785A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C33A65-8F4C-4018-B71E-F4A2EEE4785A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C33A65-8F4C-4018-B71E-F4A2EEE4785A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

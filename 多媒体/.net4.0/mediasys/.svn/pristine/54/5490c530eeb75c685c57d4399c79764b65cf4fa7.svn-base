@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Data.OleDb;
+using Common;
+
+namespace DAL
+{
+    public class dclass
+    {
+        /// <summary>
+        /// 获取所有 class 表信息
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getAllRecord()
+        {
+            string str = @"select id as 编号，buiding as 楼号,classid as 教室号,remark as 备注 from class";
+            return AccessHelper.getTable(str, null);
+        }
+
+        /// <summary>
+        /// 向 class 表中插入一条记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int insertClass(classModel model)
+        {
+            string sql = "insert into [class] values('@id','@buiding','@classid','@remark')";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { new OleDbParameter("@id", OleDbType.Integer, model.id), new OleDbParameter("@buiding", OleDbType.VarChar, 50, model.buiding), new OleDbParameter("@classid", OleDbType.VarChar, 255, model.classid), new OleDbParameter("@remark", OleDbType.VarChar, 255, model.remark) };
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+        /// <summary>
+        /// 删除 class 表中一条记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>受影响记录数</returns>
+        public int delUser(classModel model)
+        {
+            string sql = "delete from [class] where id=@id";
+            OleDbParameter[] odpArrey = new OleDbParameter[] { new OleDbParameter("@id", OleDbType.Integer, model.id) };
+            return AccessHelper.executeSql(sql, odpArrey);
+        }
+
+    }
+}

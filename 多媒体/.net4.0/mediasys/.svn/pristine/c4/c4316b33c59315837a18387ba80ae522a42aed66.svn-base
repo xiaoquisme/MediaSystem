@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
+using DAL;
+using Common;
+namespace mediasys
+{
+    public partial class Fm_mainClass : DockContent
+    {
+        public Fm_mainClass()
+        {
+            InitializeComponent();
+        }
+        private void Fm_mainClass_Load(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void dgv1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+    }
+}

@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+
+namespace mediasys
+{
+    public partial class FmLogin : Form
+    {
+        Point fmDistance = new Point(0, 0);
+        bool mouseState = false;
+        Color btclosecolor;
+        public FmLogin()
+        {
+            InitializeComponent();
+            bt_clear.Click += bt_clear_Click;
+            //this.tb_user.Text = ConfigurationManager.AppSettings["preUser"].ToString();
+            //this.tb_pwd.Text = ConfigurationManager.AppSettings["prePwd"].ToString();
+        }
+
+        void bt_clear_Click(object sender, EventArgs e)
+        {
+            tb_user.Text = "";
+            tb_pwd.Text = "";
+        }
+
+        private void FmLogin_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseState = true;
+            fmDistance.X = MousePosition.X - this.Location.X;
+            fmDistance.Y = MousePosition.Y - this.Location.Y;
+        }
+
+        private void FmLogin_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseState = false;
+            GC.Collect();
+        }
+
+        private void Bt_close_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+            this.Close();
+        }
+
+        private void FmLogin_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseState)
+            {
+                this.Location = new Point(MousePosition.X - fmDistance.X, MousePosition.Y - fmDistance.Y);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+
+        private void Bt_close_Enter(object sender, EventArgs e)
+        {
+            btclosecolor = Bt_close.BackColor;
+            Bt_close.BackColor = Color.Red;
+        }
+
+        private void Bt_close_Leave(object sender, EventArgs e)
+        {
+            Bt_close.BackColor = btclosecolor;
+        }
+
+        private void bt_ok_Click(object sender, EventArgs e)
+        {
+           //这里需要处理数据
+        }
+
+        private void tb_user_Enter(object sender, EventArgs e)
+        {
+            this.lbError.Visible = false;
+        }
+
+        private void tb_pwd_Enter(object sender, EventArgs e)
+        {
+            this.lbError.Visible = false;
+        }
+
+        private void FmLogin_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+                bt_ok_Click(null, null);
+        }
+
+        private void tb_pwd_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+                bt_ok_Click(null, null);
+        }
+
+      
+    }
+}
